@@ -105,6 +105,10 @@ async def on_message(message: discord.Message):
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message("Pong!")
 
+@bot.tree.command(name="version", description="Replies with current version")
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message("ver. 1.1")
+
 @bot.tree.command(name="echo", description="Echoes back your message.")
 async def echo_slash(interaction: discord.Interaction, message: str):
     await interaction.response.send_message(f'echo: {message}')
