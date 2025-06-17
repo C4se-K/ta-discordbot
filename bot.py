@@ -9,6 +9,7 @@ import asyncio
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 N8N_URL = os.environ.get('N8N_WEBHOOK_URL')
+N8N_URL_C = os.environ.get('N8N_WEBHOOK_URL_CONTEXT')
 ALLOWED_GUILD_IDS = [1360032501103333476, 1367322720853032970]
 
 if not BOT_TOKEN:
