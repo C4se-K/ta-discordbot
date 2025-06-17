@@ -20,12 +20,43 @@ if not N8N_URL:
 
 
 intents = discord.Intents.default()
+intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 flask_app = Flask(__name__)
 
 
 
+async def send_to_webhook(payload: dict):
+    """
+    Sends a data payload to the configured N8N webhook URL.
+
+    Args:
+        payload: A dictionary containing the data to send.
+    
+    Returns:
+        A tuple (bool, str) indicating success and a message.
+    """
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.post(N8N_URL_C, json=payload, timeout=15) as response:
+                if response.status == 200:
+                    response_text = await response.text()
+                    print(f"Successfully sent to webhook. Response: {response_text}")
+                    return True, "Payload delivered successfully."
+                else:
+                    error_text = await response.text()
+                    print(f"Webhook Error: {response.status} - {error_text}")
+                    return False, f'Failed to send message. Service returned status: {response.status}.'
+        except asyncio.TimeoutError:
+            print("Webhook request timed out.")
+            return False, 'The request to the service timed out.'
+        except aiohttp.ClientConnectorError as e:
+            print(f"Webhook connection error: {e}")
+            return False, f'Could not connect to the service: {e}'
+        except Exception as e:
+            print(f"An unexpected error occurred while sending to webhook: {e}")
+            return False, f'An unexpected error occurred: {e}'
 
 
 @flask_app.route('/')
@@ -44,6 +75,29 @@ async def on_ready():
         print(f"Synced {len(synced)} command(s).")
     except Exception as e:
         print(f"Error syncing commands: {e}")
+
+@bot.event
+async def on_message(message: discord.Message):
+    if message.author.bot:
+        return
+
+    if not message.guild or message.guild.id not in ALLOWED_GUILD_IDS:
+        return
+
+    payload = {
+        "source": "on_message_listener",
+        "content": message.content,
+        "user_name": message.author.name,
+        "user_id": str(message.author.id),
+        "channel_name": message.channel.name if hasattr(message.channel, 'name') else "Unknown Channel",
+        "channel_id": str(message.channel.id),
+        "guild_name": message.guild.name,
+        "guild_id": str(message.guild.id),
+        "message_id": str(message.id),
+        "message_url": message.jump_url
+    }
+
+    asyncio.create_task(send_to_webhook(payload))
 
 
 @bot.tree.command(name="ping", description="Replies with Pong!")
