@@ -73,3 +73,26 @@ The bot will exit on startup if required variables are missing.
 ```bash
   python bot.py
 ```
+
+Slash Commands
+/ping
+
+Responds with Pong!
+
+/version
+
+Returns the current version string.
+
+/echo <message>
+
+Echoes the provided message.
+
+/ask <message>
+
+Sends your message and metadata to the primary n8n webhook.
+Provides an ephemeral confirmation message.
+
+##Behavior on Shutdown
+
+The bot runs inside asyncio.run().
+Ctrl + C triggers a clean shutdown and logs the termination.
