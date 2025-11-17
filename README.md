@@ -74,7 +74,7 @@ The bot will exit on startup if required variables are missing.
   python bot.py
 ```
 
-Slash Commands
+## Slash Commands
 /ping
 
 Responds with Pong!
@@ -92,7 +92,7 @@ Echoes the provided message.
 Sends your message and metadata to the primary n8n webhook.
 Provides an ephemeral confirmation message.
 
-##Behavior on Shutdown
+## Behavior on Shutdown
 
 The bot runs inside asyncio.run().
 Ctrl + C triggers a clean shutdown and logs the termination.
