@@ -60,7 +60,7 @@ The bot will exit on startup if required variables are missing.
 
 ### 1. Install dependencies
 ```bash
-  pip install discord.py aiohttp flask
+  pip install -r requirements.txt
 ```
 2. Set environment variables
 ```bash
