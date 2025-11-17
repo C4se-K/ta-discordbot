@@ -58,7 +58,7 @@ The bot will exit on startup if required variables are missing.
 
 # Installation
 
-### 1. Install dependencies
+1. Install dependencies
 ```bash
   pip install -r requirements.txt
 ```
