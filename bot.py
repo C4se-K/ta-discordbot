@@ -29,15 +29,6 @@ flask_app = Flask(__name__)
 
 
 async def send_to_webhook(payload: dict):
-    """
-    Sends a data payload to the configured N8N webhook URL.
-
-    Args:
-        payload: A dictionary containing the data to send.
-    
-    Returns:
-        A tuple (bool, str) indicating success and a message.
-    """
     async with aiohttp.ClientSession() as session:
         try:
             async with session.post(N8N_URL_C, json=payload, timeout=15) as response:
